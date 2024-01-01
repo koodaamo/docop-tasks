@@ -1,7 +1,7 @@
 
 [project]
 name = "docop-tasks"
-version = "0.3.0"
+version = "0.3.1"
 authors = [
     {name = "Petri Savolainen", email = "petri@koodaamo.fi"},
 ]
@@ -21,7 +21,7 @@ Homepage = "https://github.com/koodaamo/docop-tasks"
 Repository = "https://github.com/koodaamo/docop-tasks"
 
 [project.entry-points.'docop.tasks']
-url2html = 'docop_tasks.webhtml.fetch_html'
+fetch_html = 'docop_tasks.webhtml.fetch_html'
 
 [build-system]
 requires = ["setuptools", "setuptools-scm"]

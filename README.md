@@ -5,5 +5,5 @@ This package contains built-in tasks for docop.
 Fetch and store HTML from source URLs.
 
 - input: a source with a set of resources (URLs) to fetch
-- output: documents with 'reference', 'title' and 'html' fields
+- output: documents with 'reference', 'title', 'html' and 'uuid' fields
 

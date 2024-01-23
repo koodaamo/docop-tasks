@@ -1,9 +1,12 @@
 """fetch and store HTML from source URLs.
 input: a source with some resources
-output: documents with 'reference', 'title' and 'html' fields
+output: documents with 'reference', 'title', 'html' and 'uuid' fields
 """
 
 import asyncio
+import uuid
+import hashlib
+from urllib.parse import urlparse
 from playwright.async_api import async_playwright
 from rich import print
 from rich.progress import track
@@ -29,6 +32,7 @@ async def main():
         
         for url in track(urls, description=f" ↳ fetching, rendering and extracting HTML from {len(urls)} urls", transient=True):
             await page.goto(url)
+            response = await page.wait_for_response(url)
             title = await page.title()
             titles.append(title)
             #await page.screenshot(path=f'{title}.png')
@@ -37,6 +41,9 @@ async def main():
             doc["reference"] = url
             doc["title"] = title
             doc["html"] = html
+            baseurl = urlparse(url).netloc
+            namespace = uuid.UUID(hashlib.md5(baseurl.encode('utf-8')).hexdigest())
+            doc["uuid"] = uuid.uuid5(namespace, url)
             global collection
             collection += doc
 

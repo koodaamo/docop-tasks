@@ -32,18 +32,17 @@ async def main():
         
         for url in track(urls, description=f" ↳ fetching, rendering and extracting HTML from {len(urls)} urls", transient=True):
             await page.goto(url)
-            response = await page.wait_for_response(url)
             title = await page.title()
             titles.append(title)
-            #await page.screenshot(path=f'{title}.png')
             html = await page.content()
             doc = Document(title=title)
             doc["reference"] = url
             doc["title"] = title
+            doc["type"] = "html"
             doc["html"] = html
             baseurl = urlparse(url).netloc
             namespace = uuid.UUID(hashlib.md5(baseurl.encode('utf-8')).hexdigest())
-            doc["uuid"] = uuid.uuid5(namespace, url)
+            doc["uuid"] = str(uuid.uuid5(namespace, url))
             global collection
             collection += doc
 

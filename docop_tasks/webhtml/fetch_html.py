@@ -31,7 +31,7 @@ async def main():
         titles = []
         
         for url in track(urls, description=f" ↳ fetching, rendering and extracting HTML from {len(urls)} urls", transient=True):
-            await page.goto(url)
+            resp = await page.goto(url)
             title = await page.title()
             titles.append(title)
             html = await page.content()
@@ -40,6 +40,7 @@ async def main():
             doc["title"] = title
             doc["type"] = "html"
             doc["html"] = html
+            doc["modified"] = await resp.header_value("last-modified")
             baseurl = urlparse(url).netloc
             namespace = uuid.UUID(hashlib.md5(baseurl.encode('utf-8')).hexdigest())
             doc["uuid"] = str(uuid.uuid5(namespace, url))
